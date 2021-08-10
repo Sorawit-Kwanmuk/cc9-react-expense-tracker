@@ -1,40 +1,46 @@
-//12 MONTHS
+import { formatThaiCurrency } from '../services/currencyService';
+import { formatShotMonthShortYear } from '../services/dateService';
 
-const MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
-
-function TransactionCard({ transaction }) {
-  console.log(transaction.date);
+function TransactionCard({ transaction: { date, category, payee, amount } }) {
   return (
-    <li className='list-group-item d-flex justify-content-between align-items-center bd-callout bd-callout-danger'>
+    <li
+      className={`list-group-item d-flex justify-content-between align-items-center bd-callout bd-callout-${
+        category.type === 'Income' ? 'success' : 'danger'
+      }`}>
       <div className='transaction-detail d-flex flex-fill me-4'>
         <div className='transaction-date-card border border-1 border-dark rounded-2 bg-warning p-2 text-center'>
-          <p className='p-0 m-0 fs-7 text-black-50'>Jan 21</p>
-          <p className='p-0 m-0'>
+          <p className='p-0 m-0 fs-7 text-black-50'>
             {/* {transaction.date.toString().slice(4, 7)}{' '}
             {`${transaction.date.getFullYear()}`.slice(2)} */}
-            {MONTHS[transaction.date.getMonth()]}
-            {`${transaction.date.getFullYear()}`.slice(2)}
+            {formatShotMonthShortYear(date)}
           </p>
+          <p className='p-0 m-0'>{date.getDate()}</p>
         </div>
         <div className='d-flex justify-content-between align-items-center flex-fill ps-4'>
           <div>
-            <p className='mb-1 f-5 fw-bold'>{transaction.payee}</p>
-            <p className='mb-0 text-black-50 fs-7'>Food</p>
+            <p className='mb-1 f-5 fw-bold'>{payee}</p>
+            <p className='mb-0 text-black-50 fs-7'>{category.name}</p>
           </div>
-          <span className='badge bg-danger'>{transaction.category.name}</span>
+          {/* <span className='badge bg-danger'>{new Intl.NumberFormat([])}</span>
+          //ใช้ค่า default ของเครื่อง ตรวสอบได้โดย log(navigator.language)
+          <span className='badge bg-danger'>
+            {new Intl.NumberFormat(undefined)}
+            //ใช้ค่า default ของเครื่อง ตรวสอบได้โดย log(navigator.language)
+          </span> */}
+          <span
+            className={`badge bg-${
+              category.type === 'Income' ? 'success' : 'danger'
+            }`}>
+            {/* {new Intl.NumberFormat('en-US', {
+              style: 'currency',
+              currency: 'THB',
+              // currencyDisplay: 'symbol',//ค่า default
+              // currencyDisplay: 'name',//ชื่อเต็มค่าเงินอยู่ด้านหลัง
+              // currencyDisplay: 'code,//ชื่อเต็มค่าเงินอยู่ด้านหลัง
+              currencyDisplay: 'narrowSymbol', //ชื่สัญลักษณ์ด้านหน้า
+            }).format(amount)} */}
+            {formatThaiCurrency(amount)}
+          </span>
         </div>
       </div>
       <button className='btn btn-link text-secondary p-0 border-0'>
