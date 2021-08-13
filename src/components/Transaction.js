@@ -1,10 +1,15 @@
-import TransactionCard from './TransactionCard';
+import TransactionCart from './TransactionCart';
 
-function Transaction({ transactions }) {
+function Transaction({ transactions, deleteTransaction, updateTransaction }) {
   return (
     <ul className='list-group'>
       {transactions.map(item => (
-        <TransactionCard key={item.id} transaction={item} />
+        <TransactionCart
+          key={item.id}
+          transaction={item}
+          deleteTransaction={deleteTransaction}
+          updateTransaction={updateTransaction}
+        />
       ))}
     </ul>
   );

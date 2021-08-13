@@ -12,7 +12,7 @@ const INCOMES = [
   { id: uuidv4(), name: 'Salary', type: 'Income' },
 ];
 
-const INITIAL_TRANSACTION = [
+const INITIAL_TRANSACTIONS = [
   {
     id: uuidv4(),
     payee: '7-11',
@@ -53,4 +53,4 @@ const MONTHS = [
   'Dec',
 ];
 
-export { EXPENSES, INCOMES, INITIAL_TRANSACTION, MONTHS };
+export { EXPENSES, INCOMES, INITIAL_TRANSACTIONS, MONTHS };
