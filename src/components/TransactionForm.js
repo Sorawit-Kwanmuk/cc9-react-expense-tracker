@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { EXPENSES, INCOMES } from '../mocks/data';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  validatePayee,
-  validateAmount,
-  validateDate,
-} from '../services/validateService';
+import { validatePayee, validateAmount, validateDate } from '../services/validateService';
+import Select from './UI/Select';
+import Col from './UI/Col.';
+import Input from './UI/input';
 function TransactionForm({ addTransaction, closeAddForm }) {
   const [type, setType] = useState('Expense');
   const [category, setCategory] = useState(EXPENSES[0].id);
@@ -133,9 +132,7 @@ function TransactionForm({ addTransaction, closeAddForm }) {
               defaultChecked
               onChange={handleChangeType}
             />
-            <label
-              className='btn btn-outline-danger rounded-0 rounded-start'
-              htmlFor='cbx-expense'>
+            <label className='btn btn-outline-danger rounded-0 rounded-start' htmlFor='cbx-expense'>
               Expense
             </label>
             <input
@@ -144,40 +141,25 @@ function TransactionForm({ addTransaction, closeAddForm }) {
               name='type'
               id='cbx-income'
               value='Income'
-              // defaultChecked
               onChange={handleChangeType}
             />
-            <label
-              className='btn btn-outline-success rounded-0 rounded-end'
-              htmlFor='cbx-income'>
+            <label className='btn btn-outline-success rounded-0 rounded-end' htmlFor='cbx-income'>
               Income
             </label>
           </div>
-          <button
-            type='button'
-            className='btn-close btn-sm'
-            onClick={closeAddForm}></button>
+          <button type='button' className='btn-close btn-sm' onClick={closeAddForm}></button>
         </div>
-        <div className='col-sm-6'>
-          <label className='form-label'>Payee</label>
-          <input
-            type='text'
-            className={`form-control${error.payee ? ' is-invalid' : ''}`}
-            value={payee}
-            onChange={handleChangePayee}
-          />
-          <div className='invalid-feedback'>{error.payee}</div>
-        </div>
-        <div className='col-sm-6'>
-          <label className='form-label'>Category</label>
-          <select
-            className='form-select'
-            value={category}
-            onChange={e => setCategory(e.target.value)}>
+
+        <Col sm={6}>
+          <Input title='Payee' error={error.payee} value={payee} onChange={handleChangePayee} />
+        </Col>
+
+        <Col sm={6}>
+          <Select title='Category' value={category} onChange={e => setCategory(e.target.value)}>
             {categoryOptions}
-          </select>
-        </div>
-        <div className='col-sm-6'>
+          </Select>
+        </Col>
+        {/* <div className='col-sm-6'>
           <label className='form-label'>Amount</label>
           <input
             type='text'
@@ -186,7 +168,10 @@ function TransactionForm({ addTransaction, closeAddForm }) {
             onChange={handleChangeAmount}
           />
           <div className='invalid-feedback'>{error.amount}</div>
-        </div>
+        </div> */}
+        <Col sm={6}>
+          <Input title='Amount' error={error.amount} value={amount} onChange={handleChangeAmount} />
+        </Col>
         <div className='col-sm-6'>
           <label className='form-label'>Date</label>
           <input

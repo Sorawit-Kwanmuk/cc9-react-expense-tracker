@@ -1,6 +1,6 @@
 import './App.css';
 import { INITIAL_TRANSACTIONS } from './mocks/data';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Pagination from './components/Pagination';
 import Searchbar from './components/Searchbar';
 import Summary from './components/Summary';
@@ -16,6 +16,14 @@ function App() {
     month: '',
     year: '',
   });
+  const [pagination, setPagination] = useState({
+    perPage: 5,
+    currentPage: 1,
+  });
+
+  useEffect(() => {
+    setPagination({ perPage: 5, currentPage: 1 });
+  }, [filter]);
 
   const addTransaction = newTransaction => {
     // #1
@@ -61,33 +69,43 @@ function App() {
 
   const filteredTransactions = transactions.filter(
     item =>
-      item.payee.toLowerCase().includes(filter.text.toLowerCase()) ||
+      (item.payee.toLowerCase().includes(filter.text.toLowerCase()) ||
+        item.category.name.toLowerCase().includes(filter.text.toLowerCase())) &&
       //search payee ถ้าหาเจอ จะได้ค่าเป็น true แล้งจะส่งค่าelementนั้น ไปเก็บใน result array [ele1, ele2, ele3]
       //item.payee.toLowerCase().includes(ค่าที่ต้องการจะนำไปเทียบกับ payee เช่น มี r ไหม ถ้ามีจะส่งค่าเป็น true)
       // (filter.text.toLowerCase()) คือค่าที่พิมพ์ใส่เข้าไปใน input search
       //EX item.payee.include('tes') แล้วใน payee มีค่า 'tesco lotus' ซึ่งมี tes อยู่ จะได้ค่าเป็น true แล้วจะนำค่าที่เป็นtrue ไปเก็บใน result array
       //resule = ['tesco lotus']  ฮ๋อ filter ใน include ไม่ใช่ ฟังก์ชั่นแต่เป็นตัวแปรใน state งงตั้งนาน
-      item.category.name.toLowerCase().includes(filter.text.toLowerCase())
-    // item.date.getMonth()===5 ค่าเดือนที่เรากำหนด value ให้เป็นตัวเลข
-    // item.date.getFullYear()===2021
+
+      (item.date.getMonth() === +filter.month || filter.month === '') &&
+      //date.getMonth() จะ return ค่าเดือนของitem เป็น number 0-11 แล้วกำหนดเงื่อนไข ถ้า กรณีที่มีค่าเท่ากับ filterที่กำหนด
+      // หรือ ถ้าในfilter เป็น '' จะเอามาแสดงทุกค่า
+
+      (item.date.getFullYear() === +filter.year || filter.year === '')
+  );
+
+  const numPage = Math.ceil(transactions.length / pagination.perPage) || 1;
+  //ถ้า Math.ceil(transactions.length / pagination.perPage) ได้ 0 จะได้ค่าเป็น false จะทำให้|| ทำงานค่าหลัง
+
+  const shownTransactions = filteredTransactions.slice(
+    (pagination.currentPage - 1) * pagination.perPage,
+    pagination.currentPage * pagination.perPage
   );
 
   return (
     <div className='container'>
       <div className='content'>
         {isAdding ? (
-          <TransactionForm
-            addTransaction={addTransaction}
-            closeAddForm={closeAddForm}
-          />
+          <TransactionForm addTransaction={addTransaction} closeAddForm={closeAddForm} />
         ) : (
           <AddTransactionButton openAddForm={openAddForm} />
         )}
         <Summary transactions={transactions} />
         <Searchbar filter={filter} setFilter={setFilter} />
-        <Pagination />
+        <Pagination pagination={pagination} setPagination={setPagination} numPage={numPage} />
+        {/*pagination จำนวนต่อหน้า*/}
         <Transaction
-          transactions={filteredTransactions}
+          transactions={shownTransactions}
           deleteTransaction={deleteTransaction}
           updateTransaction={updateTransaction}
         />
