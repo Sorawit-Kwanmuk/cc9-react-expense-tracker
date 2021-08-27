@@ -1,4 +1,4 @@
-const formatThaiCurreny = value => {
+const formatThaiCurrency = value => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'THB',
@@ -6,4 +6,4 @@ const formatThaiCurreny = value => {
   }).format(value);
 };
 
-export { formatThaiCurreny };
+export { formatThaiCurrency };

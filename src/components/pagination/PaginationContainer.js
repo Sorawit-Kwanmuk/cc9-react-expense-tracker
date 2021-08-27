@@ -1,43 +1,91 @@
-function PaginationContainer() {
+import { useContext } from 'react';
+import { PaginationContext } from './paginationContext';
+
+function PaginationContainer({ length }) {
+  const { perPage, setPerPage, currentPage, setCurrentPage } =
+    useContext(PaginationContext);
+  const numPage = Math.ceil(length / perPage);
+  const result = [];
+  for (let i = 1; i <= numPage; i++) {
+    result.push(i);
+  }
+
+  // const createPageList = () => {
+  //   const result = [];
+  //   for (let i = 0; i < numPage; i++) {
+  //     result.push(
+  //       <li className='page-item active' key={i}>
+  //         <a href='/' className='page-link'>
+  //           <span>{i + 1}</span>
+  //         </a>
+  //       </li>
+  //     );
+  //   }
+  //   return result;
+  // };
+
+  const handleClickPrevious = e => {
+    e.preventDefault();
+    if (currentPage !== 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleClickNext = e => {
+    e.preventDefault();
+    if (currentPage !== numPage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handleClickPage = (e, page) => {
+    e.preventDefault();
+    setCurrentPage(page);
+  };
+
   return (
     <div className='mt-3 d-flex justify-content-between'>
       <div className='d-flex align-items-center mb-3'>
         <div>
-          <select type='text' className='form-select form-select-sm'>
-            <option value=''>10</option>
-            <option value=''>25</option>
-            <option value=''>50</option>
-            <option value=''>100</option>
+          <select
+            type='text'
+            className='form-select form-select-sm'
+            value={perPage}
+            onChange={e => setPerPage(+e.target.value)}>
+            <option value='10'>10</option>
+            <option value='25'>25</option>
+            <option value='50'>50</option>
+            <option value='100'>100</option>
           </select>
         </div>
         <span className='text-white-50 mx-2 fs-7'>
-          Showing 1 to 10 of 20 transactions
+          Showing 1 to 10 of {length} transactions
         </span>
       </div>
       <nav>
         <ul className='pagination pagination-sm'>
-          <li className='page-item disabled'>
-            <a href='/' className='page-link'>
+          <li className={`page-item${currentPage === 1 ? ' disabled' : ''}`}>
+            <a href='/' className='page-link' onClick={handleClickPrevious}>
               <span>&laquo;</span>
             </a>
           </li>
-          <li className='page-item active'>
-            <a href='/' className='page-link'>
-              <span>1</span>
-            </a>
-          </li>
-          <li className='page-item'>
-            <a href='/' className='page-link'>
-              <span>2</span>
-            </a>
-          </li>
-          <li className='page-item'>
-            <a href='/' className='page-link'>
-              <span>3</span>
-            </a>
-          </li>
-          <li className='page-item'>
-            <a href='/' className='page-link'>
+          {/* {createPageList()} */}
+          {result.map(item => (
+            <li
+              className={`page-item${item === currentPage ? ' active' : ''}`}
+              key={item}>
+              <a href='/' className='page-link' onClick={e => handleClickPage(e, item)}>
+                {/* onclick={e => {
+                  e.preventDefault();
+                  setCurrentPage(item);
+                }> */}
+                <span>{item}</span>
+              </a>
+            </li>
+          ))}
+
+          <li className={`page-item${currentPage === numPage ? ' disable' : ''}`}>
+            <a href='/' className='page-link' onClick={handleClickNext}>
               <span>&raquo;</span>
             </a>
           </li>
