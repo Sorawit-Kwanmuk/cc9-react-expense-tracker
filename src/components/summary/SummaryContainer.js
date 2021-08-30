@@ -1,9 +1,6 @@
-import { useContext } from 'react';
-import { TransactionContext } from '../../contexts/transactionContext';
 import SummaryCard from './SummaryCard';
 
-function SummaryContainer() {
-  const { transactions } = useContext(TransactionContext);
+function SummaryContainer({ transactions }) {
   // const expense = transactions.reduce((sum, item) => {
   //   if (item.category.type === 'EXPENSE') {
   //     return sum + item.amount;

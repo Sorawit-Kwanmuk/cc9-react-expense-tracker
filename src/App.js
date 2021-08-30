@@ -8,7 +8,7 @@ import CreatTransaction from './components/pages/CreatTransaction';
 import Home from './components/pages/Home';
 import { TransactionProvider } from './contexts/transactionContext';
 import { SearchProvider } from './contexts/searchContext';
-import { PaginationProvider } from './components/pagination/paginationContext';
+import { PaginationProvider } from './components/ui/paginationContext';
 
 function App() {
   return (

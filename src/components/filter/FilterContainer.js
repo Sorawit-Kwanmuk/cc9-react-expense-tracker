@@ -1,5 +1,6 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { SearchContext } from '../../contexts/searchContext';
+import { PaginationContext } from '../ui/paginationContext';
 
 function FilterContainer() {
   // const context = useContext(SearchContext)
@@ -12,6 +13,13 @@ function FilterContainer() {
     searchYear,
     setSearchYear,
   } = useContext(SearchContext);
+
+  const { setCurrentPage } = useContext(PaginationContext);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchtext, searchMonth, searchYear, setCurrentPage]);
+
   return (
     <div className='mt-4'>
       <div className='row g-3'>
@@ -22,11 +30,17 @@ function FilterContainer() {
               className='form-control form-control-sm'
               placeholder='Enter to search'
               value={searchtext}
-              onChange={e => setSearchText(e.target.value)}
+              onChange={e => {
+                setSearchText(e.target.value);
+                // setCurrentPage(1);
+              }}
             />
             <button
               className='btn btn-sm btn-outline-light'
-              onClick={() => setSearchText('')}>
+              onClick={() => {
+                setSearchText('');
+                // setCurrentPage(1);
+              }}>
               x
             </button>
           </div>
@@ -37,7 +51,10 @@ function FilterContainer() {
               className='form-select form-select-sm'
               value={searchMonth}
               onChange={
-                e => setSearchMonth(e.target.value === '' ? '' : +e.target.value)
+                e => {
+                  setSearchMonth(e.target.value === '' ? '' : +e.target.value);
+                  // setCurrentPage(1);
+                }
                 // setSearchMonth(e.target.value && +e.target.value)
               }>
               <option value=''>Month</option>
@@ -56,7 +73,10 @@ function FilterContainer() {
             </select>
             <button
               className='btn btn-sm btn-outline-light'
-              onClick={() => setSearchMonth('')}>
+              onClick={() => {
+                setSearchYear('');
+                // setCurrentPage(1);
+              }}>
               x
             </button>
           </div>
@@ -77,7 +97,10 @@ function FilterContainer() {
             </select>
             <button
               className='btn btn-sm btn-outline-light'
-              onClick={() => setSearchYear('')}>
+              onClick={() => {
+                setSearchYear('');
+                // setCurrentPage(1);
+              }}>
               x
             </button>
           </div>
