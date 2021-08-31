@@ -1,8 +1,10 @@
-function Select({ label, children }) {
+function Select({ label, children, value, onChange, name }) {
   return (
     <>
       <label className='form-label'>{label}</label>
-      <select className='form-select'>{children}</select>
+      <select className='form-select' value={value} onChange={onChange} name={name}>
+        {children}
+      </select>
     </>
   );
 }
